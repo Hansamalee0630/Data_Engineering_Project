@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 from datetime import datetime, timedelta
 import sys
 import os
+os.system("pip install plotly")
+import plotly.express as px
 import pymysql
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from src.utils.database_utils import DatabaseConnection
