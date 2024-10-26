@@ -5,3 +5,4 @@ sqlalchemy==2.0.27
 pymysql==1.1.0
 scikit-learn==1.4.0
 python-dotenv==1.0.1
+python==3.11.10
