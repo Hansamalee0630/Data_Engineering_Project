@@ -1,3 +1,23 @@
+"""
+import_data.py: Database Data Loading Module
+
+This module handles loading customer and order data from MySQL database,
+performs data validation, and provides basic data analysis summaries.
+
+Author: Hansamalee Ekanayake
+Date: October 2024
+
+Functions:
+    load_data_from_db() -> None
+        Loads customer and order data from MySQL database and performs basic validation
+
+Dependencies:
+    - pandas
+    - sqlalchemy
+    - python-dotenv
+    - pymysql
+"""
+
 import pandas as pd
 from sqlalchemy import create_engine
 import os
@@ -5,6 +25,38 @@ from dotenv import load_dotenv
 import pymysql
 
 def load_data_from_db():
+
+    """
+    Loads and validates customer and order data from MySQL database.
+    
+    This function:
+    1. Loads environment variables for database connection
+    2. Establishes connection to MySQL database
+    3. Loads customers and orders tables into pandas DataFrames
+    4. Performs basic data validation and cleanup
+    5. Prints summary statistics and data samples
+    
+    Environment Variables Required:
+        DB_HOST: Database host address (default: 'localhost')
+        DB_USER: Database username (default: 'root')
+        DB_PASSWORD: Database password
+        DB_DATABASE: Database name
+    
+    Returns:
+        None
+        
+    Prints:
+        - Data loading status and row counts
+        - Sample data from both tables
+        - Summary statistics
+        - Date range for orders
+        - Information about invalid dates
+        
+    Raises:
+        Exception: If database connection fails or data cannot be loaded
+    """
+
+    
     # Load environment variables
     load_dotenv()
     
