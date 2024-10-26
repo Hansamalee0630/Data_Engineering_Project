@@ -1,11 +1,38 @@
 # Delivergate Customer Orders App
-
 # Customer Orders Dashboard
 <img src="app View.png">
+
 This is a Streamlit dashboard application that analyzes customer order data from a MySQL database.
 
-## Setup Instructions
+## Directory Structure
+```
+NEW_ASSIGNMENT/
+├── .conda/
+├── .streamlit/
+├── config/
+│   └── config.py
+├── data/
+│   ├── processed/
+│       ├── customers_cleaned.csv
+│       └── orders_cleaned.csv
+│   └── raw/
+│       ├── customers.csv
+│       └── order.csv
+├── notebooks/
+│   └── model.ipynb
+├── src/
+│   └── app/
+│       ├── database_utils.py
+│       ├── import_data.py
+│       ├── ml_utils.py
+│       └── test_db_connection.py
+├── .env
+├── .gitignore
+├── README.md
+└── requirements.txt
+```
 
+## Setup Instructions
 1. Clone this repository:
 ```bash
 git clone <repository-url>
@@ -42,50 +69,76 @@ CREATE TABLE orders (
 );
 ```
 
-5. Update the database connection details in `database_utils.py`:
-```python
-host="localhost"
-user="your_username"
-password="your_password"
-database="your_database"
+5. Set up environment variables:
+Create a `.env` file in the root directory with the following configuration:
+```
+DB_HOST=localhost
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_NAME=your_database
 ```
 
-6. Import initial data (if using CSV files):
+6. Run config file:
 ```python
-from database_utils import DatabaseConnection
-
-db = DatabaseConnection()
-db.connect()
-db.import_csv_data('customer.csv', 'orders.csv')
+python config/config.py
 ```
 
-7. Run the Streamlit app:
+7. Import initial data:
+```python
+python src/app/import_data.py
+```
+
+8.Run database_utils file:
+```python
+python src/utils/database_utils.py
+```
+
+9. Check if the DB connection established or not:
+```python
+python src/utils/test_db_cennection.py
+```
+
+10. Run the Streamlit app:
 ```bash
-streamlit run streamlit_app.py
+streamlit run src/app/streamlit_app.py
 ```
 
 ## Features
-
 - Date range filtering for orders
 - Minimum spend and order count filters
 - Top 10 customers visualization
 - Revenue over time analysis
-- Customer repeat purchase prediction
 - Summary metrics
 - Detailed order data table
 
 ## Machine Learning Model
-
 The application includes a logistic regression model that predicts whether a customer is likely to be a repeat purchaser based on their order history and spending patterns.
 
-## Files Structure
-
-- `streamlit_app.py`: Main Streamlit application
-- `database_utils.py`: Database connection and query utilities
-- `ml_utils.py`: Machine learning model implementation
+## Project Components
+- `src/app/streamlit_app.py`: Main Streamlit application
+- `src/app/database_utils.py`: Database connection and query utilities
+- `src/app/ml_utils.py`: Machine learning model implementation
+- `src/app/import_data.py`: Data import utilities
+- `src/app/test_db_connection.py`: Database connection testing
+- `config/config.py`: Configuration settings
+- `notebooks/model.ipynb`: Data analysis and LR model include notebook
 - `requirements.txt`: Required Python packages
-- `README.md`: This file
+- `.env`: Environment variables (not tracked in git)
+
+## Development
+- Use the `notebooks/model.ipynb` for data analysis and feature development
+- Run tests using: `python -m pytest tests/`
+- Update requirements using: `pip freeze > requirements.txt`
 
 ## Note
+- Make sure to properly secure your database credentials using the `.env` file
+- Never commit sensitive information to the repository
+- For development, use the provided test database connection utility
+- Check logs directory for any error messages during data import
 
-Make sure to properly secure your database credentials in a production environment. Consider using environment variables or a secure configuration management system.
+## Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
