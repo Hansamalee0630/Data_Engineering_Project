@@ -1,7 +1,7 @@
-# Delivergate_practical
+# Delivergate Customer Orders App
 
 # Customer Orders Dashboard
-
+<img src="app View.png">
 This is a Streamlit dashboard application that analyzes customer order data from a MySQL database.
 
 ## Setup Instructions
