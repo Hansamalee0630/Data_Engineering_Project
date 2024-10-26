@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import sys
 import os
-os.system("pip install plotly")
+os.system("pip install --upgrade plotly pymysql")
 import plotly.express as px
 import pymysql
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
