@@ -1,3 +1,33 @@
+"""
+database_utils.py: Database Connection Manager
+
+This module manages MySQL database connections and provides utility functions for 
+data retrieval, filtering, and metrics calculation for the customer orders system.
+
+Author: Hansamalee Ekanayake
+Date: October 2024
+
+Functions:
+    connect() -> sqlalchemy.engine.Engine
+        Establishes and tests database connection
+    get_filtered_data(start_date, end_date, min_total_amount, min_orders) -> pd.DataFrame
+        Retrieves filtered customer and order data
+    get_summary_metrics(start_date, end_date) -> pd.DataFrame
+        Calculates summary statistics for orders
+    test_data_exists() -> Tuple[int, int, datetime, datetime]
+        Verifies data existence and returns counts and date ranges
+
+Classes:
+    DatabaseConnection
+        Handles all database operations and connections
+
+Dependencies:
+    - pandas
+    - sqlalchemy
+    - pymysql
+    - datetime
+"""
+
 import pandas as pd
 from sqlalchemy import create_engine, text
 from datetime import datetime
@@ -6,10 +36,38 @@ import os
 import pymysql  # Ensure pymysql is imported
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from config.config import DB_CONFIG
+from config.config import DB_CONFIG  
 
 class DatabaseConnection:
+    """
+    A class to manage database connections and operations for the customer orders system.
+    
+    This class handles all database-related operations including connection management,
+    data retrieval, and metric calculations.
+    
+    Attributes:
+        connection_string (str): SQLAlchemy connection string
+        engine (sqlalchemy.engine.Engine): Database engine instance
+        
+    Methods:
+        connect() -> sqlalchemy.engine.Engine:
+            Creates and tests database connection
+        get_filtered_data(start_date: datetime, end_date: datetime, 
+                         min_total_amount: float, min_orders: int) -> pd.DataFrame:
+            Retrieves filtered customer and order data
+        get_summary_metrics(start_date: datetime, end_date: datetime) -> pd.DataFrame:
+            Calculates order summary statistics
+        test_data_exists() -> Tuple[int, int, datetime, datetime]:
+            Verifies database data and returns statistics
+    """
+
+    
     def __init__(self):
+        """
+        Initializes the database connection with configuration from DB_CONFIG.
+        Constructs the connection string and initializes the engine attribute.
+        """
+        
         # Debug print to verify DB_CONFIG
         print("DB_CONFIG:", DB_CONFIG)
         
@@ -19,6 +77,16 @@ class DatabaseConnection:
         self.engine = None
         
     def connect(self):
+        """
+        Establishes connection to the MySQL database.
+        
+        Returns:
+            sqlalchemy.engine.Engine: Database engine if successful, None if failed
+            
+        Raises:
+            Exception: If connection cannot be established
+        """
+        
         try:
             self.engine = create_engine(self.connection_string)
             # Test connection
@@ -31,6 +99,19 @@ class DatabaseConnection:
             return None
             
     def get_filtered_data(self, start_date, end_date, min_total_amount, min_orders):
+        """
+        Retrieves filtered customer and order data based on specified criteria.
+        
+        Args:
+            start_date (datetime): Start date for filtering orders
+            end_date (datetime): End date for filtering orders
+            min_total_amount (float): Minimum total amount spent by customer
+            min_orders (int): Minimum number of orders by customer
+            
+        Returns:
+            pd.DataFrame: Filtered customer and order data
+        """
+        
         query = """
         WITH customer_stats AS (
             SELECT
@@ -94,6 +175,18 @@ class DatabaseConnection:
 
             
     def get_summary_metrics(self, start_date, end_date):
+        """
+        Calculates summary metrics for orders within a date range.
+        
+        Args:
+            start_date (datetime): Start date for calculating metrics
+            end_date (datetime): End date for calculating metrics
+            
+        Returns:
+            pd.DataFrame: Summary metrics including unique customers,
+                         total orders, and total revenue
+        """
+        
         query = """
         SELECT 
             COUNT(DISTINCT customer_id) as unique_customers,
@@ -125,7 +218,19 @@ class DatabaseConnection:
             return pd.DataFrame()
 
     def test_data_exists(self):
-        """Test if data exists in the database"""
+        """
+        Tests existence of data in the database tables.
+        
+        Returns:
+            Tuple[int, int, datetime, datetime]: Returns a tuple containing:
+                - Number of customers
+                - Number of orders
+                - Earliest order date
+                - Latest order date
+                
+        Raises:
+            Exception: If database query fails
+        """
         try:
             with self.engine.connect() as conn:
                 # Check customers table
