@@ -60,16 +60,18 @@ USE your_database;
 
 CREATE TABLE customers (
     customer_id INT PRIMARY KEY,
-    customer_name VARCHAR(255)
+    name VARCHAR(255),
+    email VARCHAR(255)
 );
 
 CREATE TABLE orders (
-    order_id INT PRIMARY KEY,
-    customer_id INT,
+    id INT PRIMARY KEY,
+    display_order_id VARCHAR(10),
     total_amount DECIMAL(10, 2),
-    order_date DATE,
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    created_at DATETIME,
+    customer_id INT
 );
+
 ```
 
 5. Set up environment variables:
