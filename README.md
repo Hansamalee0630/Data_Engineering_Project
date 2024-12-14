@@ -117,7 +117,7 @@ streamlit run src/app/streamlit_app.py
 - Detailed order data table
 
 ## Machine Learning Model
-The application includes a logistic regression model that predicts whether a customer is likely to be a repeat purchaser based on their order history and spending patterns.
+The application includes a lenear regression model that predicts whether a customer is likely to be a repeat purchaser based on their order history and spending patterns.
 
 ## Project Components
 - `src/app/streamlit_app.py`: Main Streamlit application
